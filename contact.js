@@ -32,7 +32,7 @@
       submitButton.disabled = true;
     }
 
-    setMessage("Envoi en cours…");
+    setMessage("cheking en cours…");
 
     const data = new FormData(form);
 
@@ -56,19 +56,19 @@
 
       if (!response.ok || !result.success) {
         throw new Error(
-          result.message || "Échec de l'envoi"
+          result.message || "Échec de connexion"
         );
       }
 
       form.reset();
 
-      setMessage("Votre message a bien été envoyé.");
+      setMessage("oups Réessayez.");
 
     } catch (error) {
       console.error("Erreur Web3Forms :", error);
 
       setMessage(
-        "Impossible d'envoyer le message. Réessayez.",
+        ". Réessayez.",
         true
       );
 
