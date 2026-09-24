@@ -12,7 +12,7 @@
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    if (accessKey.startsWith("REMPLACEZ_")) {
+    if (accessKey.startsWith("b5961753-93bd-448e-9cf4-fdfa97c50bf3")) {
       setMessage("Ajoutez votre clé Web3Forms dans contact.js avant l'envoi.", true);
       return;
     }
