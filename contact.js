@@ -1,4 +1,4 @@
-(() => {
+
   const form = document.querySelector("#contact-form");
   const message = document.querySelector("#form-message");
   const submitButton = form?.querySelector('input[type="submit"]');
