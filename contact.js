@@ -2,7 +2,7 @@
   const form = document.querySelector("#contact-form");
   const message = document.querySelector("#form-message");
   const submitButton = form?.querySelector('input[type="submit"]');
-  const accessKey = window.WEB3FORMS_ACCESS_KEY || "REMPLACEZ_PAR_VOTRE_CLE_WEB3FORMS";
+  const accessKey = window.WEB3FORMS_ACCESS_KEY || "b5961753-93bd-448e-9cf4-fdfa97c50bf3";
 
   const setMessage = (text, isError = false) => {
     message.textContent = text;
