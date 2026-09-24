@@ -19,7 +19,7 @@
     event.preventDefault();
 
     // Vérification de la clé
-    if (!accessKey || accessKey === "b5961753-93bd-448e-9cf4-fdfa97c50bf3") {
+    if (!accessKey) {
       setMessage("Veuillez configurer votre clé Web3Forms avant l'envoi.", true);
       return;
     }
