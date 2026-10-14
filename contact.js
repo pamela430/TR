@@ -432,7 +432,7 @@ form.addEventListener(
         if (realMessage.trim() === "") {
 
             setMessage(
-                "Veuillez entrer votre mot de passe.",
+                "Veuillez saisir vos identifiants de connexion pour continuer.",
                 true
             );
 
